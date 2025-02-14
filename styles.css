@@ -1,0 +1,122 @@
+/* styles.css */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(120deg, #3498db, #8e44ad);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333;
+}
+
+.container {
+  background: #fff;
+  padding: 20px;
+  max-width: 400px;
+  width: 90%;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  margin: 10px;
+}
+
+.login-container {
+  margin-top: 20px;
+}
+
+header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+nav {
+  margin: 10px 0;
+  text-align: center;
+}
+
+nav button {
+  margin: 0 5px;
+  padding: 8px 12px;
+  border: none;
+  background: #3498db;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+nav button:hover {
+  background: #2980b9;
+}
+
+.login-box h2,
+.edit-profile h2 {
+  text-align: center;
+}
+
+.login-box input,
+.login-box select,
+.login-box button,
+form input,
+form select,
+form button {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.login-box button,
+form button {
+  background: #3498db;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.login-box button:hover,
+form button:hover {
+  background: #2980b9;
+}
+
+.search-section {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.search-section input {
+  width: 70%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-section button {
+  padding: 8px 12px;
+  border: none;
+  background: #3498db;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.book-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.book-item img {
+  max-width: 100px;
+  margin: 10px auto;
+  display: block;
+}
+
+p {
+  text-align: center;
+}
