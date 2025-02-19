@@ -3,30 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin Panel - Add Books & Analytics</title>
+  <title>LMS - Admin Panel</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <header>
-    <h1>Admin Panel</h1>
-    <nav>
-      <button id="home-btn">Home</button>
-      <button id="logout-btn">Logout</button>
-    </nav>
-  </header>
-  
-  <main>
-    <section id="analytics" class="analytics-section"></section>
-    <form id="add-book-form">
-      <input type="text" id="book-name" placeholder="Book Name" required>
-      <input type="text" id="book-author" placeholder="Author Name" required>
-      <input type="text" id="book-image" placeholder="Image URL (optional)">
-      <button type="submit">Add Book</button>
-    </form>
-    <p id="message"></p>
-  </main>
-  
+  <div class="wrapper">
+    <header>
+      <h1>Admin Panel</h1>
+      <nav>
+        <button id="home-btn">Home</button>
+        <button id="logout-btn">Logout</button>
+        <!-- Dark mode toggle button -->
+        <button id="toggle-dark-mode" aria-label="Toggle dark mode">🌙</button>
+      </nav>
+    </header>
+    
+    <main>
+      <section id="analytics" class="analytics-section"></section>
+      <form id="add-book-form">
+        <input type="text" id="book-name" placeholder="Book Name" required>
+        <input type="text" id="book-author" placeholder="Author Name" required>
+        <input type="text" id="book-image" placeholder="Image URL (optional)">
+        <button type="submit">Add Book</button>
+      </form>
+      <p id="message"></p>
+    </main>
+    
+    <footer>
+      <p>&copy; 2025 Library Management System</p>
+    </footer>
+  </div>
   <div id="toast-container" class="toast-container"></div>
   <script type="module" src="js/admin.js"></script>
+  <script type="module" src="js/darkModeToggle.js"></script>
 </body>
 </html>

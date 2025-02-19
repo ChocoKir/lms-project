@@ -1,149 +1,330 @@
-/* css/styles.css */
-body {
+/* Ultimate Enhanced LMS CSS */
+
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
+
+/* CSS Variables for theming */
+:root {
+  /* Light theme variables */
+  --primary-color: #3498db;
+  --primary-hover: #2980b9;
+  --secondary-color: #9b59b6;
+  --accent-color: #e74c3c;
+  --light-bg: #ffffff;
+  --light-text: #333;
+  /* Dark theme variables */
+  --dark-bg: #2c3e50;
+  --dark-text: #f0f0f0;
+  /* Common */
+  --font-family: 'Montserrat', sans-serif;
+  --transition-speed: 0.3s;
+  --border-radius: 8px;
+}
+
+/* Global Reset */
+* {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(120deg, #3498db, #8e44ad);
+  box-sizing: border-box;
+}
+
+/* Smooth scroll for the whole document */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Base body styling (default light theme) */
+body {
+  font-family: var(--font-family);
+  background: linear-gradient(-45deg, var(--primary-color), var(--secondary-color), var(--accent-color), var(--primary-hover));
+  background-size: 400% 400%;
+  animation: gradientBG 20s ease infinite;
+  color: var(--light-text);
   min-height: 100vh;
-  color: #333;
+  line-height: 1.6;
+  transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
 }
 
-.container {
-  background: #fff;
-  padding: 20px;
-  max-width: 400px;
-  width: 90%;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  margin: 20px auto;
+/* Dark mode styles when .dark-mode class is present on body */
+body.dark-mode {
+  background: linear-gradient(-45deg, var(--dark-bg), #1f2a40, var(--secondary-color), #34495e);
+  color: var(--dark-text);
 }
 
-.login-container {
-  margin-top: 20px;
+/* Animated Gradient Background */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
+/* Layout Structure */
+.wrapper {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Header */
 header {
+  background: var(--light-bg);
+  padding: 1rem 2rem;
   text-align: center;
-  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+body.dark-mode header {
+  background: var(--dark-bg);
+}
+header h1 {
+  font-size: 2.4rem;
+  color: var(--primary-color);
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 0.5rem;
 }
 
+/* Navigation */
 nav {
-  text-align: center;
-  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
 }
-
 nav button {
-  margin: 0 5px;
-  padding: 8px 12px;
+  padding: 0.6rem 1.2rem;
   border: none;
-  background: #3498db;
+  border-radius: var(--border-radius);
+  background: var(--primary-color);
   color: #fff;
-  border-radius: 4px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: background var(--transition-speed) ease, transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+nav button:hover {
+  background: var(--primary-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-nav button:hover {
-  background: #2980b9;
+/* Main Content */
+main {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Container (Forms, Cards, etc.) */
+.container {
+  background: var(--light-bg);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  animation: fadeInUp 0.8s ease both;
+  position: relative;
+  overflow: hidden;
+}
+body.dark-mode .container {
+  background: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+/* Fade In Up Animation */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Form Elements */
+form input,
+form select,
+form textarea,
+button {
+  width: 100%;
+  padding: 0.8rem;
+  margin: 0.6rem 0;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: border var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+form input:focus,
+form select:focus,
+form textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 10px rgba(52,152,219,0.3);
+  outline: none;
+}
+
+/* Buttons */
+button {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background var(--transition-speed) ease, transform var(--transition-speed) ease;
+}
+button:hover {
+  background: var(--primary-hover);
   transform: scale(1.02);
 }
 
-input, select, textarea, button {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  background: #3498db;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #2980b9;
-}
-
-header h1 {
-  margin: 10px 0;
-  font-size: 1.8rem;
-}
-
+/* Search Section */
 .search-section {
-  text-align: center;
-  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
-
 .search-section input {
-  width: 45%;
-  padding: 8px;
-  margin: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  flex: 1 1 40%;
+  min-width: 120px;
+  padding: 0.6rem;
+}
+.search-section button {
+  padding: 0.6rem 1rem;
 }
 
+/* Book List Grid */
+#book-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Book Card */
 .book-item {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 4px;
+  background: #fefefe;
+  border: 1px solid #ddd;
+  padding: 1.2rem;
+  border-radius: var(--border-radius);
   text-align: center;
-  background: #f9f9f9;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
+.book-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
 .book-item img {
   max-width: 100px;
+  margin: 1rem auto;
   display: block;
-  margin: 10px auto;
 }
 
+/* Review Section in Cards */
 .review {
   font-size: 0.9rem;
   border-top: 1px dashed #ccc;
-  padding-top: 5px;
-  margin-top: 5px;
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+  color: #555;
 }
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--primary-color);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--primary-hover);
+  border-radius: var(--border-radius);
+}
+
+/* Toast Notifications */
 .toast-container {
   position: fixed;
   top: 20px;
   right: 20px;
-  z-index: 1000;
+  z-index: 10000;
 }
-
 .toast {
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.85);
   color: #fff;
-  padding: 10px 20px;
-  margin-bottom: 10px;
-  border-radius: 4px;
-  animation: fadein 0.5s, fadeout 0.5s 3s;
+  padding: 0.8rem 1.2rem;
+  margin-bottom: 0.5rem;
+  border-radius: var(--border-radius);
+  animation: fadeIn 0.5s ease, fadeOut 0.5s 3s forwards;
 }
-
-@keyframes fadein {
+@keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
-@keyframes fadeout {
+@keyframes fadeOut {
   from { opacity: 1; }
   to { opacity: 0; }
 }
 
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20000;
+  animation: fadeIn 0.5s ease;
+}
+.modal-content {
+  background: var(--light-bg);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  max-width: 90%;
+  width: 400px;
+  position: relative;
+}
+body.dark-mode .modal-content {
+  background: var(--dark-bg);
+  color: var(--dark-text);
+}
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Footer */
+footer {
+  background: var(--light-bg);
+  padding: 1rem 2rem;
+  text-align: center;
+  border-top: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+body.dark-mode footer {
+  background: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+/* Responsive Styles */
 @media (max-width: 600px) {
   .container {
     max-width: 90%;
-    padding: 10px;
+    padding: 1rem;
   }
   nav button {
     margin: 5px 2px;
-    padding: 6px 10px;
+    padding: 0.5rem 0.8rem;
     font-size: 0.9rem;
   }
   input, button {
-    font-size: 1rem;
+    font-size: 0.9rem;
+  }
+  .search-section {
+    flex-direction: column;
   }
 }

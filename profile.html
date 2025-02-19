@@ -3,38 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My Profile - Library Management System</title>
+  <title>LMS - My Profile</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <header>
-    <h1>My Profile</h1>
-    <nav>
-      <button id="home-btn">Home</button>
-      <button id="logout-btn">Logout</button>
-    </nav>
-  </header>
-  
-  <main>
-    <section id="profile-info">
-      <img id="profile-pic" src="default-profile.jpg" alt="Profile Picture" width="100">
-      <p><strong>Username:</strong> <span id="username"></span></p>
-      <p><strong>Nickname:</strong> <span id="nickname"></span></p>
-      <!-- Hidden file input for avatar upload -->
-      <input type="file" id="file-upload" style="display:none;" accept="image/*">
-    </section>
-    <section class="edit-profile">
-      <h2>Edit Profile</h2>
-      <form id="edit-profile-form">
-        <input type="text" id="new-nickname" placeholder="New Nickname">
-        <input type="text" id="new-profile-pic" placeholder="Profile Picture URL">
-        <button type="submit">Update Profile</button>
-      </form>
-      <p id="message"></p>
-    </section>
-  </main>
-  
+  <div class="wrapper">
+    <header>
+      <h1>My Profile</h1>
+      <nav>
+        <button id="home-btn">Home</button>
+        <button id="logout-btn">Logout</button>
+        <!-- Dark mode toggle button -->
+        <button id="toggle-dark-mode" aria-label="Toggle dark mode">🌙</button>
+      </nav>
+    </header>
+    
+    <main>
+      <section id="profile-info">
+        <img id="profile-pic" src="default-profile.jpg" alt="Profile Picture" width="100">
+        <p><strong>Username:</strong> <span id="username"></span></p>
+        <p><strong>Nickname:</strong> <span id="nickname"></span></p>
+        <!-- Hidden file input for avatar upload -->
+        <input type="file" id="file-upload" style="display:none;" accept="image/*">
+      </section>
+      <section class="edit-profile">
+        <h2>Edit Profile</h2>
+        <form id="edit-profile-form">
+          <input type="text" id="new-nickname" placeholder="New Nickname">
+          <input type="text" id="new-profile-pic" placeholder="Profile Picture URL">
+          <button type="submit">Update Profile</button>
+        </form>
+        <p id="message"></p>
+      </section>
+    </main>
+    
+    <footer>
+      <p>&copy; 2025 Library Management System</p>
+    </footer>
+  </div>
   <div id="toast-container" class="toast-container"></div>
   <script type="module" src="js/profile.js"></script>
+  <script type="module" src="js/darkModeToggle.js"></script>
 </body>
 </html>
