@@ -31,7 +31,7 @@ async function isFavorite(bookId) {
   return data && data.length > 0;
 }
 
-// Toggle Favorite: now updates a star icon on the button
+// Toggle Favorite
 async function toggleFavorite(bookId, btnElement) {
   const favExists = await isFavorite(bookId);
   if (favExists) {
@@ -60,7 +60,7 @@ async function toggleFavorite(bookId, btnElement) {
   reloadBooks();
 }
 
-// Fetch Books with filtering, sorting, and pagination
+// Fetch Books with Filtering, Sorting, and Pagination
 async function fetchBooks(titleQuery = "", authorQuery = "", sortBy = "name", page = 0) {
   const from = page * pageSize;
   const to = from + pageSize - 1;
@@ -100,9 +100,7 @@ async function fetchBooks(titleQuery = "", authorQuery = "", sortBy = "name", pa
     // Favorite button
     const favBtn = document.createElement("button");
     favBtn.innerText = "☆";
-    favBtn.onclick = async () => {
-      await toggleFavorite(book.id, favBtn);
-    };
+    favBtn.onclick = async () => { await toggleFavorite(book.id, favBtn); };
     bookItem.appendChild(favBtn);
     // Reservation button
     if (book.borrowed_by && !book.reserved_by) {
@@ -115,7 +113,7 @@ async function fetchBooks(titleQuery = "", authorQuery = "", sortBy = "name", pa
       reservedText.innerText = `Reserved by ${book.reserved_by}`;
       bookItem.appendChild(reservedText);
     }
-    // Reviews section and form
+    // Reviews Section & Form
     const reviewSection = document.createElement("div");
     reviewSection.innerHTML = `
       <h4>Reviews:</h4>
@@ -136,27 +134,77 @@ async function fetchBooks(titleQuery = "", authorQuery = "", sortBy = "name", pa
   });
 }
 
-// Borrow a book
+// Borrow Book: Updates both books and borrowed_books table
 async function borrowBook(bookId) {
-  const { error } = await supabase
+  // Update books table
+  const { error: updateError } = await supabase
     .from("books")
     .update({ borrowed_by: loggedInUser, borrowed_at: new Date() })
     .eq("id", bookId);
-  if (error) showToast("Failed to borrow: " + error.message);
-  else { showToast("Book borrowed!"); reloadBooks(); }
+  if (updateError) {
+    showToast("Failed to borrow: " + updateError.message);
+    return;
+  }
+  // Get user's UUID from custom users table
+  const { data: userData, error: userError } = await supabase
+    .from("users")
+    .select("id")
+    .eq("username", loggedInUser)
+    .single();
+  if (userError || !userData) {
+    showToast("Failed to get user info: " + (userError ? userError.message : "User not found"));
+    return;
+  }
+  const userId = userData.id;
+  // Insert record into borrowed_books
+  const { error: insertError } = await supabase
+    .from("borrowed_books")
+    .insert([{ user_id: userId, book_id: bookId, borrowed_at: new Date(), returned: false }]);
+  if (insertError) {
+    showToast("Failed to record borrowing: " + insertError.message);
+  } else {
+    showToast("Book borrowed successfully!");
+    reloadBooks();
+  }
 }
 
-// Return a book
+// Return Book: Updates both books and borrowed_books table
 async function returnBook(bookId) {
-  const { error } = await supabase
+  // Update books table
+  const { error: updateError } = await supabase
     .from("books")
     .update({ borrowed_by: null, borrowed_at: null })
     .eq("id", bookId);
-  if (error) showToast("Failed to return: " + error.message);
-  else { showToast("Book returned!"); reloadBooks(); }
+  if (updateError) {
+    showToast("Failed to return: " + updateError.message);
+    return;
+  }
+  // Get user's UUID from custom users table
+  const { data: userData, error: userError } = await supabase
+    .from("users")
+    .select("id")
+    .eq("username", loggedInUser)
+    .single();
+  if (userError || !userData) {
+    showToast("Failed to get user info: " + (userError ? userError.message : "User not found"));
+    return;
+  }
+  const userId = userData.id;
+  // Update borrowed_books table: mark records for this book and user as returned
+  const { error: updateBorrowError } = await supabase
+    .from("borrowed_books")
+    .update({ returned: true })
+    .eq("book_id", bookId)
+    .eq("user_id", userId);
+  if (updateBorrowError) {
+    showToast("Failed to update borrowing history: " + updateBorrowError.message);
+  } else {
+    showToast("Book returned successfully!");
+    reloadBooks();
+  }
 }
 
-// Reserve a book
+// Reserve Book
 async function reserveBook(bookId) {
   const { error } = await supabase
     .from("books")
@@ -166,7 +214,7 @@ async function reserveBook(bookId) {
   else { showToast("Book reserved!"); reloadBooks(); }
 }
 
-// Submit a review
+// Submit Review
 async function submitReview(e, bookId) {
   e.preventDefault();
   const form = e.target;
@@ -179,14 +227,14 @@ async function submitReview(e, bookId) {
   else { showToast("Review submitted!"); loadReviews(bookId); form.reset(); loadStars(bookId); }
 }
 
-// Load reviews for a book
+// Load Reviews
 async function loadReviews(bookId) {
   const { data: reviews, error } = await supabase
     .from("reviews")
     .select("*")
     .eq("book_id", bookId)
     .order("created_at", { ascending: false });
-  const container = document.getElementById(`reviews-${book.id}`) || document.getElementById(`reviews-${bookId}`);
+  const container = document.getElementById(`reviews-${bookId}`);
   container.innerHTML = "<h4>Reviews:</h4>";
   if (error) { container.innerHTML += "<p>Error loading reviews.</p>"; return; }
   reviews.forEach((rev) => {
@@ -197,7 +245,7 @@ async function loadReviews(bookId) {
   });
 }
 
-// Load stars for review form
+// Load Stars for Review Form
 function loadStars(bookId) {
   const starContainer = document.getElementById(`stars-${bookId}`);
   if (!starContainer) return;
@@ -255,7 +303,7 @@ window.closeModal = function() {
   document.getElementById("modal-overlay").style.display = "none";
 };
 
-// Infinite scroll
+// Infinite Scroll
 window.addEventListener("scroll", () => {
   if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
     currentPage++;
@@ -272,7 +320,7 @@ function reloadBooks() {
   fetchBooks(titleQuery, authorQuery, document.getElementById("sort-by")?.value || "name", currentPage);
 }
 
-// Search suggestions (autocomplete)
+// Search Suggestions (Autocomplete)
 document.getElementById("search").addEventListener("input", (e) => {
   const input = e.target.value.toLowerCase();
   const suggestions = allBooks.filter(name => name.toLowerCase().includes(input));

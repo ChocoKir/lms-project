@@ -70,7 +70,7 @@ document.getElementById("file-upload").addEventListener("change", async (e) => {
 
 // Export Borrowing History as CSV
 document.getElementById("export-btn")?.addEventListener("click", async () => {
-  // First, get the user's UUID from the custom 'users' table
+  // Get user's UUID from custom users table
   const { data: userData, error: userError } = await supabase
     .from("users")
     .select("id")
@@ -83,12 +83,15 @@ document.getElementById("export-btn")?.addEventListener("click", async () => {
   }
   
   const userId = userData.id;
-  
-  // Now, query borrowed_books using the UUID
+  console.log("User UUID:", userId); // Debug log
+
+  // Query borrowed_books using the user's UUID
   const { data: history, error } = await supabase
     .from("borrowed_books")
     .select("*")
     .eq("user_id", userId);
+
+  console.log("Borrowing History:", history); // Debug log
   
   if (error) {
     showToast("Error exporting history: " + error.message);
@@ -103,16 +106,13 @@ document.getElementById("export-btn")?.addEventListener("click", async () => {
   
   let csv = "id,book_id,borrowed_at,returned\n";
   history.forEach(item => {
-    const idVal = item.id || "N/A";
-    const bookIdVal = item.book_id || "N/A";
     let borrowedAtVal = "";
     if (item.borrowed_at && !isNaN(new Date(item.borrowed_at).getTime())) {
       borrowedAtVal = new Date(item.borrowed_at).toISOString();
     } else {
       borrowedAtVal = item.borrowed_at ? String(item.borrowed_at) : "N/A";
     }
-    const returnedVal = typeof item.returned !== "undefined" ? item.returned : "N/A";
-    csv += `${idVal},${bookIdVal},${borrowedAtVal},${returnedVal}\n`;
+    csv += `${item.id},${item.book_id},${borrowedAtVal},${item.returned}\n`;
   });
   
   const blob = new Blob([csv], { type: "text/csv" });
@@ -122,6 +122,7 @@ document.getElementById("export-btn")?.addEventListener("click", async () => {
   a.download = "borrowing_history.csv";
   a.click();
 });
+
 
 // Navigation
 document.getElementById("home-btn").addEventListener("click", () => {
