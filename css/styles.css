@@ -67,23 +67,31 @@ button:hover {
   background: #2980b9;
 }
 
+header h1 {
+  margin: 10px 0;
+  font-size: 1.8rem;
+}
+
 .search-section {
   text-align: center;
   margin-bottom: 20px;
 }
 
 .search-section input {
-  width: 70%;
+  width: 45%;
   padding: 8px;
-  margin-right: 5px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .book-item {
   border: 1px solid #ccc;
   padding: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   border-radius: 4px;
   text-align: center;
+  background: #f9f9f9;
 }
 
 .book-item img {
@@ -92,7 +100,13 @@ button:hover {
   margin: 10px auto;
 }
 
-/* Toast notifications */
+.review {
+  font-size: 0.9rem;
+  border-top: 1px dashed #ccc;
+  padding-top: 5px;
+  margin-top: 5px;
+}
+
 .toast-container {
   position: fixed;
   top: 20px;
@@ -119,7 +133,6 @@ button:hover {
   to { opacity: 0; }
 }
 
-/* Responsive Styles */
 @media (max-width: 600px) {
   .container {
     max-width: 90%;

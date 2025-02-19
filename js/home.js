@@ -39,7 +39,7 @@ async function fetchBooks(titleQuery = "", authorQuery = "") {
           : (!book.borrowed_by ? `<button onclick="borrowBook('${book.id}')">Borrow</button>` : "")
       }
     `;
-    // Add review section
+    // Append review section
     const reviewSection = document.createElement("div");
     reviewSection.innerHTML = `
       <h4>Reviews:</h4>

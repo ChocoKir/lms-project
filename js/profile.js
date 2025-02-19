@@ -47,7 +47,7 @@ document.getElementById("edit-profile-form").addEventListener("submit", async (e
   }
 });
 
-// Avatar upload: Clicking the profile picture opens file input.
+// Avatar upload: Clicking profile picture triggers file input.
 document.getElementById("profile-pic").addEventListener("click", () => {
   document.getElementById("file-upload").click();
 });
