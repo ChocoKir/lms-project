@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Admin Panel - Add Books</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <header>
@@ -16,15 +16,17 @@
   </header>
   
   <main>
+    <section id="analytics"></section>
     <form id="add-book-form">
-      <input type="text" id="book-name" placeholder="Book Name" required />
-      <input type="text" id="book-author" placeholder="Author Name" required />
-      <input type="text" id="book-image" placeholder="Image URL (optional)" />
+      <input type="text" id="book-name" placeholder="Book Name" required>
+      <input type="text" id="book-author" placeholder="Author Name" required>
+      <input type="text" id="book-image" placeholder="Image URL (optional)">
       <button type="submit">Add Book</button>
     </form>
     <p id="message"></p>
   </main>
   
-  <script type="module" src="admin.js"></script>
+  <div id="toast-container" class="toast-container"></div>
+  <script type="module" src="js/admin.js"></script>
 </body>
 </html>

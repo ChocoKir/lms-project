@@ -1,9 +1,10 @@
-// admin.js
+// js/admin.js
 import { supabase } from "./supabase.js";
+import { showToast } from "./utils.js";
 
 const loggedInUser = localStorage.getItem("username");
 if (!loggedInUser) {
-  alert("❌ Please log in first!");
+  showToast("Please log in first!");
   window.location.href = "index.html";
 }
 
@@ -14,12 +15,31 @@ async function checkAdmin() {
     .eq("username", loggedInUser)
     .single();
   if (error || !data || data.role !== "admin") {
-    alert("❌ Access Denied! Only admins can access this page.");
+    showToast("Access Denied! Only admins can access this page.");
     window.location.href = "home.html";
   }
 }
-
 checkAdmin();
+
+// Load Analytics
+async function loadAnalytics() {
+  const { count: totalBooks, error: bookError } = await supabase
+    .from("books")
+    .select("id", { count: "exact", head: true });
+  const { count: totalBorrowed, error: borrowError } = await supabase
+    .from("books")
+    .select("id", { count: "exact", head: true })
+    .neq("borrowed_by", null);
+  if (!bookError && !borrowError) {
+    document.getElementById("analytics").innerHTML = `
+      <p>Total Books: ${totalBooks}</p>
+      <p>Borrowed Books: ${totalBorrowed}</p>
+    `;
+  } else {
+    document.getElementById("analytics").innerHTML = "<p>Error loading analytics.</p>";
+  }
+}
+loadAnalytics();
 
 document.getElementById("add-book-form").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -36,9 +56,12 @@ document.getElementById("add-book-form").addEventListener("submit", async (e) =>
   if (error) {
     console.error("Error adding book:", error);
     document.getElementById("message").innerText = "❌ Failed to add book!";
+    showToast("Failed to add book: " + error.message);
   } else {
     document.getElementById("message").innerText = "✅ Book added successfully!";
+    showToast("Book added successfully!");
     document.getElementById("add-book-form").reset();
+    loadAnalytics();
   }
 });
 

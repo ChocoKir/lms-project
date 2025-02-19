@@ -1,9 +1,10 @@
-// profile.js
+// js/profile.js
 import { supabase } from "./supabase.js";
+import { showToast } from "./utils.js";
 
 const loggedInUser = localStorage.getItem("username");
 if (!loggedInUser) {
-  alert("❌ Please log in first!");
+  showToast("Please log in first!");
   window.location.href = "index.html";
 }
 
@@ -34,15 +35,35 @@ document.getElementById("edit-profile-form").addEventListener("submit", async (e
     document.getElementById("message").innerText = "❌ No changes made!";
     return;
   }
-  const { error } = await supabase
-    .from("users")
-    .update(updates)
-    .eq("username", loggedInUser);
+  const { error } = await supabase.from("users").update(updates).eq("username", loggedInUser);
   if (error) {
     console.error("Error updating profile:", error);
     document.getElementById("message").innerText = "❌ Failed to update profile!";
+    showToast("Profile update failed: " + error.message);
   } else {
     document.getElementById("message").innerText = "✅ Profile updated successfully!";
+    showToast("Profile updated successfully!");
+    loadProfile();
+  }
+});
+
+// Avatar upload: Clicking the profile picture opens file input.
+document.getElementById("profile-pic").addEventListener("click", () => {
+  document.getElementById("file-upload").click();
+});
+document.getElementById("file-upload").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const { data, error } = await supabase
+    .storage
+    .from("avatars")
+    .upload(file.name, file);
+  if (error) {
+    showToast("Error uploading avatar: " + error.message);
+  } else {
+    const avatarUrl = data.path;
+    await supabase.from("users").update({ profile_pic: avatarUrl }).eq("username", loggedInUser);
+    showToast("Profile picture updated!");
     loadProfile();
   }
 });
@@ -51,7 +72,6 @@ document.getElementById("logout-btn").addEventListener("click", () => {
   localStorage.removeItem("username");
   window.location.href = "index.html";
 });
-
 document.getElementById("home-btn").addEventListener("click", () => {
   window.location.href = "home.html";
 });

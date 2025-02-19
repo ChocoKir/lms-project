@@ -1,13 +1,10 @@
-/* styles.css */
+/* css/styles.css */
 body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
   background: linear-gradient(120deg, #3498db, #8e44ad);
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   color: #333;
 }
 
@@ -18,7 +15,7 @@ body {
   width: 90%;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  margin: 10px;
+  margin: 20px auto;
 }
 
 .login-container {
@@ -26,14 +23,13 @@ body {
 }
 
 header {
-  width: 100%;
   text-align: center;
   margin-bottom: 20px;
 }
 
 nav {
-  margin: 10px 0;
   text-align: center;
+  margin: 10px 0;
 }
 
 nav button {
@@ -44,24 +40,15 @@ nav button {
   color: #fff;
   border-radius: 4px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 nav button:hover {
   background: #2980b9;
+  transform: scale(1.02);
 }
 
-.login-box h2,
-.edit-profile h2 {
-  text-align: center;
-}
-
-.login-box input,
-.login-box select,
-.login-box button,
-form input,
-form select,
-form button {
+input, select, textarea, button {
   width: 100%;
   padding: 10px;
   margin: 5px 0;
@@ -69,16 +56,14 @@ form button {
   border-radius: 4px;
 }
 
-.login-box button,
-form button {
+button {
   background: #3498db;
   color: #fff;
   border: none;
   cursor: pointer;
 }
 
-.login-box button:hover,
-form button:hover {
+button:hover {
   background: #2980b9;
 }
 
@@ -90,33 +75,62 @@ form button:hover {
 .search-section input {
   width: 70%;
   padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.search-section button {
-  padding: 8px 12px;
-  border: none;
-  background: #3498db;
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
+  margin-right: 5px;
 }
 
 .book-item {
   border: 1px solid #ccc;
   padding: 10px;
   margin-bottom: 10px;
-  text-align: center;
   border-radius: 4px;
+  text-align: center;
 }
 
 .book-item img {
   max-width: 100px;
-  margin: 10px auto;
   display: block;
+  margin: 10px auto;
 }
 
-p {
-  text-align: center;
+/* Toast notifications */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.toast {
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  animation: fadein 0.5s, fadeout 0.5s 3s;
+}
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeout {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+  .container {
+    max-width: 90%;
+    padding: 10px;
+  }
+  nav button {
+    margin: 5px 2px;
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+  input, button {
+    font-size: 1rem;
+  }
 }
