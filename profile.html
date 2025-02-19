@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>LMS - My Profile</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
   <div class="wrapper">
@@ -13,27 +13,27 @@
       <nav>
         <button id="home-btn">Home</button>
         <button id="logout-btn">Logout</button>
-        <!-- Dark mode toggle button -->
         <button id="toggle-dark-mode" aria-label="Toggle dark mode">🌙</button>
       </nav>
     </header>
     
     <main>
-      <section id="profile-info">
-        <img id="profile-pic" src="default-profile.jpg" alt="Profile Picture" width="100">
+      <section id="profile-info" class="container">
+        <img id="profile-pic" src="default-profile.jpg" alt="Profile Picture" width="100" style="cursor:pointer;">
         <p><strong>Username:</strong> <span id="username"></span></p>
         <p><strong>Nickname:</strong> <span id="nickname"></span></p>
         <!-- Hidden file input for avatar upload -->
         <input type="file" id="file-upload" style="display:none;" accept="image/*">
       </section>
-      <section class="edit-profile">
+      <section class="container edit-profile">
         <h2>Edit Profile</h2>
         <form id="edit-profile-form">
-          <input type="text" id="new-nickname" placeholder="New Nickname">
-          <input type="text" id="new-profile-pic" placeholder="Profile Picture URL">
+          <input type="text" id="new-nickname" placeholder="New Nickname" />
+          <input type="text" id="new-profile-pic" placeholder="Profile Picture URL" />
           <button type="submit">Update Profile</button>
         </form>
         <p id="message"></p>
+        <button id="export-btn">Export Borrowing History</button>
       </section>
     </main>
     

@@ -23,6 +23,7 @@ async function loadProfile() {
   document.getElementById("nickname").innerText = data.nickname || "No nickname set";
   document.getElementById("profile-pic").src = data.profile_pic || "default-profile.jpg";
 }
+loadProfile();
 
 document.getElementById("edit-profile-form").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -32,22 +33,21 @@ document.getElementById("edit-profile-form").addEventListener("submit", async (e
   if (newNickname) updates.nickname = newNickname;
   if (newProfilePic) updates.profile_pic = newProfilePic;
   if (Object.keys(updates).length === 0) {
-    document.getElementById("message").innerText = "❌ No changes made!";
+    document.getElementById("message").innerText = "No changes made!";
     return;
   }
   const { error } = await supabase.from("users").update(updates).eq("username", loggedInUser);
   if (error) {
-    console.error("Error updating profile:", error);
-    document.getElementById("message").innerText = "❌ Failed to update profile!";
+    document.getElementById("message").innerText = "Failed to update profile!";
     showToast("Profile update failed: " + error.message);
   } else {
-    document.getElementById("message").innerText = "✅ Profile updated successfully!";
+    document.getElementById("message").innerText = "Profile updated!";
     showToast("Profile updated successfully!");
     loadProfile();
   }
 });
 
-// Avatar upload: Clicking profile picture triggers file input.
+// Avatar upload
 document.getElementById("profile-pic").addEventListener("click", () => {
   document.getElementById("file-upload").click();
 });
@@ -68,12 +68,58 @@ document.getElementById("file-upload").addEventListener("change", async (e) => {
   }
 });
 
+// Export Borrowing History as CSV
+document.getElementById("export-btn")?.addEventListener("click", async () => {
+  // First, get the user's UUID from your custom users table
+  const { data: userData, error: userError } = await supabase
+    .from("users")
+    .select("id")
+    .eq("username", loggedInUser)
+    .single();
+
+  if (userError || !userData) {
+    showToast("Error fetching user data: " + (userError ? userError.message : "User not found"));
+    return;
+  }
+
+  const userId = userData.id;
+  const { data: history, error } = await supabase
+    .from("borrowed_books")
+    .select("*")
+    .eq("user_id", userId);
+  
+  if (error) {
+    showToast("Error exporting history: " + error.message);
+    console.error("Export Error:", error);
+    return;
+  }
+  
+  let csv = "id,book_id,borrowed_at,returned\n";
+  history.forEach(item => {
+    let borrowedAt = "";
+    if (item.borrowed_at && !isNaN(new Date(item.borrowed_at).getTime())) {
+      borrowedAt = new Date(item.borrowed_at).toISOString();
+    } else {
+      borrowedAt = item.borrowed_at ? String(item.borrowed_at) : "";
+    }
+    csv += `${item.id},${item.book_id},${borrowedAt},${item.returned}\n`;
+  });
+  
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "borrowing_history.csv";
+  a.click();
+});
+
+
+
+// Navigation
+document.getElementById("home-btn").addEventListener("click", () => {
+  window.location.href = "home.html";
+});
 document.getElementById("logout-btn").addEventListener("click", () => {
   localStorage.removeItem("username");
   window.location.href = "index.html";
 });
-document.getElementById("home-btn").addEventListener("click", () => {
-  window.location.href = "home.html";
-});
-
-loadProfile();

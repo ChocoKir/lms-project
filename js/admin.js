@@ -21,7 +21,7 @@ async function checkAdmin() {
 }
 checkAdmin();
 
-// Load Analytics
+// Load Analytics: total books and borrowed books
 async function loadAnalytics() {
   const { count: totalBooks, error: bookError } = await supabase
     .from("books")
@@ -47,18 +47,17 @@ document.getElementById("add-book-form").addEventListener("submit", async (e) =>
   const author = document.getElementById("book-author").value.trim();
   const image = document.getElementById("book-image").value.trim() || null;
   if (!name || !author) {
-    document.getElementById("message").innerText = "❌ Fill all required fields!";
+    document.getElementById("message").innerText = "Fill all required fields!";
     return;
   }
   const { error } = await supabase.from("books").insert([
     { name, author, image_url: image, borrowed_by: null, borrowed_at: null }
   ]);
   if (error) {
-    console.error("Error adding book:", error);
-    document.getElementById("message").innerText = "❌ Failed to add book!";
-    showToast("Failed to add book: " + error.message);
+    document.getElementById("message").innerText = "Failed to add book!";
+    showToast("Error: " + error.message);
   } else {
-    document.getElementById("message").innerText = "✅ Book added successfully!";
+    document.getElementById("message").innerText = "Book added successfully!";
     showToast("Book added successfully!");
     document.getElementById("add-book-form").reset();
     loadAnalytics();
