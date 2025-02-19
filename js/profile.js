@@ -70,7 +70,7 @@ document.getElementById("file-upload").addEventListener("change", async (e) => {
 
 // Export Borrowing History as CSV
 document.getElementById("export-btn")?.addEventListener("click", async () => {
-  // First, get the user's UUID from your custom users table
+  // First, get the user's UUID from the custom 'users' table
   const { data: userData, error: userError } = await supabase
     .from("users")
     .select("id")
@@ -81,8 +81,10 @@ document.getElementById("export-btn")?.addEventListener("click", async () => {
     showToast("Error fetching user data: " + (userError ? userError.message : "User not found"));
     return;
   }
-
+  
   const userId = userData.id;
+  
+  // Now, query borrowed_books using the UUID
   const { data: history, error } = await supabase
     .from("borrowed_books")
     .select("*")
@@ -94,15 +96,23 @@ document.getElementById("export-btn")?.addEventListener("click", async () => {
     return;
   }
   
+  if (!history || history.length === 0) {
+    showToast("No borrowing history found!");
+    return;
+  }
+  
   let csv = "id,book_id,borrowed_at,returned\n";
   history.forEach(item => {
-    let borrowedAt = "";
+    const idVal = item.id || "N/A";
+    const bookIdVal = item.book_id || "N/A";
+    let borrowedAtVal = "";
     if (item.borrowed_at && !isNaN(new Date(item.borrowed_at).getTime())) {
-      borrowedAt = new Date(item.borrowed_at).toISOString();
+      borrowedAtVal = new Date(item.borrowed_at).toISOString();
     } else {
-      borrowedAt = item.borrowed_at ? String(item.borrowed_at) : "";
+      borrowedAtVal = item.borrowed_at ? String(item.borrowed_at) : "N/A";
     }
-    csv += `${item.id},${item.book_id},${borrowedAt},${item.returned}\n`;
+    const returnedVal = typeof item.returned !== "undefined" ? item.returned : "N/A";
+    csv += `${idVal},${bookIdVal},${borrowedAtVal},${returnedVal}\n`;
   });
   
   const blob = new Blob([csv], { type: "text/csv" });
@@ -112,8 +122,6 @@ document.getElementById("export-btn")?.addEventListener("click", async () => {
   a.download = "borrowing_history.csv";
   a.click();
 });
-
-
 
 // Navigation
 document.getElementById("home-btn").addEventListener("click", () => {
