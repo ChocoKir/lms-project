@@ -2,7 +2,7 @@
 import { supabase } from "./supabase.js";
 import { showToast } from "./utils.js";
 
-// REGISTRATION using custom table (plaintext demo)
+// REGISTRATION
 if (document.getElementById("register-form")) {
   document.getElementById("register-form").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -27,7 +27,7 @@ if (document.getElementById("register-form")) {
   });
 }
 
-// LOGIN using custom table
+// LOGIN
 if (document.getElementById("login-btn")) {
   document.getElementById("login-btn").addEventListener("click", async (e) => {
     e.preventDefault();

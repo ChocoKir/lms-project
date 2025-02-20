@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>LMS - Home</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
   <div class="wrapper">
     <header>
-      <h1>Library Management System</h1>
+      <h1 id="header-title">Library Management System</h1>
       <nav>
         <button id="profile-btn">My Profile</button>
         <button id="admin-btn" style="display: none;">Admin Panel</button>
-        <button id="logout-btn">Logout</button>
+        <button id="chat-btn">Chat</button>
+        <button id="toggle-lang" aria-label="Toggle language">EN</button>
         <button id="toggle-dark-mode" aria-label="Toggle dark mode">🌙</button>
+        <button id="logout-btn">Logout</button>
       </nav>
     </header>
     
     <main>
       <section class="search-section">
-        <input type="text" id="search" placeholder="Search by title">
-        <input type="text" id="search-author" placeholder="Search by author">
+        <input type="text" id="search" placeholder="Search by title" />
+        <input type="text" id="search-author" placeholder="Search by author" />
         <select id="sort-by">
           <option value="name">Sort by Title</option>
           <option value="author">Sort by Author</option>
@@ -46,6 +48,14 @@
   
   <div id="toast-container" class="toast-container"></div>
   <script type="module" src="js/home.js"></script>
+  <script type="module" src="js/langToggle.js"></script>
   <script type="module" src="js/darkModeToggle.js"></script>
+  <script type="module" src="js/googleBooks.js"></script>
+  <script type="module">
+    // Chat button event: Navigate to chat page
+    document.getElementById("chat-btn").addEventListener("click", () => {
+      window.location.href = "chat.html";
+    });
+  </script>
 </body>
 </html>

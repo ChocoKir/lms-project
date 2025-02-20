@@ -9,20 +9,19 @@
 <body>
   <div class="wrapper">
     <header>
-      <h1>My Profile</h1>
+      <h1 id="header-title">Library Management System</h1>
       <nav>
         <button id="home-btn">Home</button>
         <button id="logout-btn">Logout</button>
+        <button id="toggle-lang" aria-label="Toggle language">EN</button>
         <button id="toggle-dark-mode" aria-label="Toggle dark mode">🌙</button>
       </nav>
     </header>
-    
     <main>
       <section id="profile-info" class="container">
         <img id="profile-pic" src="default-profile.jpg" alt="Profile Picture" width="100" style="cursor:pointer;">
         <p><strong>Username:</strong> <span id="username"></span></p>
         <p><strong>Nickname:</strong> <span id="nickname"></span></p>
-        <!-- Hidden file input for avatar upload -->
         <input type="file" id="file-upload" style="display:none;" accept="image/*">
       </section>
       <section class="container edit-profile">
@@ -36,13 +35,13 @@
         <button id="export-btn">Export Borrowing History</button>
       </section>
     </main>
-    
     <footer>
       <p>&copy; 2025 Library Management System</p>
     </footer>
   </div>
   <div id="toast-container" class="toast-container"></div>
   <script type="module" src="js/profile.js"></script>
+  <script type="module" src="js/langToggle.js"></script>
   <script type="module" src="js/darkModeToggle.js"></script>
 </body>
 </html>

@@ -21,25 +21,42 @@ async function checkAdmin() {
 }
 checkAdmin();
 
-// Load Analytics: total books and borrowed books
-async function loadAnalytics() {
-  const { count: totalBooks, error: bookError } = await supabase
+// Load analytics data and render Chart.js chart
+async function loadAnalyticsData() {
+  const { count: totalBooks } = await supabase
     .from("books")
     .select("id", { count: "exact", head: true });
-  const { count: totalBorrowed, error: borrowError } = await supabase
+  const { count: totalBorrowed } = await supabase
     .from("books")
     .select("id", { count: "exact", head: true })
     .neq("borrowed_by", null);
-  if (!bookError && !borrowError) {
-    document.getElementById("analytics").innerHTML = `
-      <p>Total Books: ${totalBooks}</p>
-      <p>Borrowed Books: ${totalBorrowed}</p>
-    `;
-  } else {
-    document.getElementById("analytics").innerHTML = "<p>Error loading analytics.</p>";
-  }
+  const { count: totalReserved } = await supabase
+    .from("books")
+    .select("id", { count: "exact", head: true })
+    .not("reserved_by", "is", null);
+  return { totalBooks, totalBorrowed, totalReserved };
 }
-loadAnalytics();
+
+async function renderChart() {
+  const { totalBooks, totalBorrowed, totalReserved } = await loadAnalyticsData();
+  const ctx = document.getElementById("analyticsChart").getContext("2d");
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Total Books', 'Borrowed', 'Reserved'],
+      datasets: [{
+        label: 'Library Analytics',
+        data: [totalBooks, totalBorrowed, totalReserved],
+        backgroundColor: ['#3498db', '#e74c3c', '#9b59b6'],
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+    }
+  });
+}
+renderChart();
 
 document.getElementById("add-book-form").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -60,7 +77,7 @@ document.getElementById("add-book-form").addEventListener("submit", async (e) =>
     document.getElementById("message").innerText = "Book added successfully!";
     showToast("Book added successfully!");
     document.getElementById("add-book-form").reset();
-    loadAnalytics();
+    renderChart();
   }
 });
 

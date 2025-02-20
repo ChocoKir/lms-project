@@ -1,6 +1,4 @@
 // js/utils.js
-
-// Toast notification function
 export function showToast(message) {
   const container = document.getElementById("toast-container");
   if (!container) return;
@@ -12,6 +10,3 @@ export function showToast(message) {
     container.removeChild(toast);
   }, 4000);
 }
-
-// Optional: Modal (for future use)
-// function showModal(content) { ... }

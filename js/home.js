@@ -1,6 +1,7 @@
 // js/home.js
 import { supabase } from "./supabase.js";
 import { showToast } from "./utils.js";
+import { fetchGoogleBookDetails } from "./googleBooks.js";
 
 const loggedInUser = localStorage.getItem("username");
 if (!loggedInUser) {
@@ -31,7 +32,7 @@ async function isFavorite(bookId) {
   return data && data.length > 0;
 }
 
-// Toggle Favorite
+// Toggle Favorite: updates the star icon on the button
 async function toggleFavorite(bookId, btnElement) {
   const favExists = await isFavorite(bookId);
   if (favExists) {
@@ -44,7 +45,7 @@ async function toggleFavorite(bookId, btnElement) {
       showToast("Failed to remove favorite: " + error.message);
       return;
     }
-    btnElement.innerText = "☆";
+    btnElement.innerText = "☆"; // outline star
     showToast("Removed from favorites!");
   } else {
     const { error } = await supabase
@@ -54,13 +55,13 @@ async function toggleFavorite(bookId, btnElement) {
       showToast("Failed to add favorite: " + error.message);
       return;
     }
-    btnElement.innerText = "★";
+    btnElement.innerText = "★"; // filled star
     showToast("Added to favorites!");
   }
   reloadBooks();
 }
 
-// Fetch Books with Filtering, Sorting, and Pagination
+// Fetch Books with filtering, sorting, and pagination
 async function fetchBooks(titleQuery = "", authorQuery = "", sortBy = "name", page = 0) {
   const from = page * pageSize;
   const to = from + pageSize - 1;
@@ -113,10 +114,9 @@ async function fetchBooks(titleQuery = "", authorQuery = "", sortBy = "name", pa
       reservedText.innerText = `Reserved by ${book.reserved_by}`;
       bookItem.appendChild(reservedText);
     }
-    // Reviews Section & Form
+    // Reviews Section and Form (header is set dynamically)
     const reviewSection = document.createElement("div");
     reviewSection.innerHTML = `
-      <h4>Reviews:</h4>
       <div id="reviews-${book.id}"></div>
       <form onsubmit="submitReview(event, '${book.id}')">
         <div>
@@ -136,7 +136,6 @@ async function fetchBooks(titleQuery = "", authorQuery = "", sortBy = "name", pa
 
 // Borrow Book: Updates both books and borrowed_books table
 async function borrowBook(bookId) {
-  // Update books table
   const { error: updateError } = await supabase
     .from("books")
     .update({ borrowed_by: loggedInUser, borrowed_at: new Date() })
@@ -145,7 +144,6 @@ async function borrowBook(bookId) {
     showToast("Failed to borrow: " + updateError.message);
     return;
   }
-  // Get user's UUID from custom users table
   const { data: userData, error: userError } = await supabase
     .from("users")
     .select("id")
@@ -156,7 +154,6 @@ async function borrowBook(bookId) {
     return;
   }
   const userId = userData.id;
-  // Insert record into borrowed_books
   const { error: insertError } = await supabase
     .from("borrowed_books")
     .insert([{ user_id: userId, book_id: bookId, borrowed_at: new Date(), returned: false }]);
@@ -170,7 +167,6 @@ async function borrowBook(bookId) {
 
 // Return Book: Updates both books and borrowed_books table
 async function returnBook(bookId) {
-  // Update books table
   const { error: updateError } = await supabase
     .from("books")
     .update({ borrowed_by: null, borrowed_at: null })
@@ -179,7 +175,6 @@ async function returnBook(bookId) {
     showToast("Failed to return: " + updateError.message);
     return;
   }
-  // Get user's UUID from custom users table
   const { data: userData, error: userError } = await supabase
     .from("users")
     .select("id")
@@ -190,7 +185,6 @@ async function returnBook(bookId) {
     return;
   }
   const userId = userData.id;
-  // Update borrowed_books table: mark records for this book and user as returned
   const { error: updateBorrowError } = await supabase
     .from("borrowed_books")
     .update({ returned: true })
@@ -236,7 +230,10 @@ async function loadReviews(bookId) {
     .order("created_at", { ascending: false });
   const container = document.getElementById(`reviews-${bookId}`);
   container.innerHTML = "<h4>Reviews:</h4>";
-  if (error) { container.innerHTML += "<p>Error loading reviews.</p>"; return; }
+  if (error) {
+    container.innerHTML += "<p>Error loading reviews.</p>";
+    return;
+  }
   reviews.forEach((rev) => {
     const revDiv = document.createElement("div");
     revDiv.classList.add("review");
@@ -265,7 +262,7 @@ window.setReviewRating = function(event, rating, bookId) {
   });
 };
 
-// Modal functions
+// Modal functions: Fetch extra details from Google Books API too
 window.openModalWithBook = async function(bookId) {
   const { data: book, error } = await supabase
     .from("books")
@@ -278,6 +275,8 @@ window.openModalWithBook = async function(bookId) {
     <p><strong>Author:</strong> ${book.author}</p>
     <img src="${book.image_url || 'placeholder.jpg'}" alt="Book Cover" loading="lazy" width="150">
     <p>${book.borrowed_by ? `Borrowed by ${book.borrowed_by}` : "Available"}</p>
+    <button id="extra-details-btn">View Extra Details</button>
+    <div id="extra-details"></div>
   `;
   const { data: reviews } = await supabase
     .from("reviews")
@@ -291,6 +290,20 @@ window.openModalWithBook = async function(bookId) {
     });
   } else { modalHTML += "<p>No reviews yet.</p>"; }
   openModal(modalHTML);
+  
+  // Add event listener for extra details
+  document.getElementById("extra-details-btn").addEventListener("click", async () => {
+    const extraDetails = await fetchGoogleBookDetails(book.name);
+    if (extraDetails) {
+      document.getElementById("extra-details").innerHTML = `
+        <p><strong>Description:</strong> ${extraDetails.description || "N/A"}</p>
+        <p><strong>Page Count:</strong> ${extraDetails.pageCount || "N/A"}</p>
+        <p><strong>Publisher:</strong> ${extraDetails.publisher || "N/A"}</p>
+      `;
+    } else {
+      document.getElementById("extra-details").innerText = "No extra details found.";
+    }
+  });
 };
 
 window.openModal = function(contentHTML) {

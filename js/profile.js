@@ -76,34 +76,24 @@ document.getElementById("export-btn")?.addEventListener("click", async () => {
     .select("id")
     .eq("username", loggedInUser)
     .single();
-
   if (userError || !userData) {
     showToast("Error fetching user data: " + (userError ? userError.message : "User not found"));
     return;
   }
-  
   const userId = userData.id;
-  console.log("User UUID:", userId); // Debug log
-
-  // Query borrowed_books using the user's UUID
   const { data: history, error } = await supabase
     .from("borrowed_books")
     .select("*")
     .eq("user_id", userId);
-
-  console.log("Borrowing History:", history); // Debug log
-  
   if (error) {
     showToast("Error exporting history: " + error.message);
     console.error("Export Error:", error);
     return;
   }
-  
   if (!history || history.length === 0) {
     showToast("No borrowing history found!");
     return;
   }
-  
   let csv = "id,book_id,borrowed_at,returned\n";
   history.forEach(item => {
     let borrowedAtVal = "";
@@ -114,7 +104,6 @@ document.getElementById("export-btn")?.addEventListener("click", async () => {
     }
     csv += `${item.id},${item.book_id},${borrowedAtVal},${item.returned}\n`;
   });
-  
   const blob = new Blob([csv], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -122,7 +111,6 @@ document.getElementById("export-btn")?.addEventListener("click", async () => {
   a.download = "borrowing_history.csv";
   a.click();
 });
-
 
 // Navigation
 document.getElementById("home-btn").addEventListener("click", () => {
