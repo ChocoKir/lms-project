@@ -9,22 +9,22 @@
 <body>
   <div class="container login-container">
     <header>
-      <h1 id="header-title">Library Management System</h1>
+      <h1 id="header-title" tabindex="0" title="Library Management System">Library Management System</h1>
       <nav>
-        <button id="toggle-lang" aria-label="Toggle language">EN</button>
-        <button id="toggle-dark-mode" aria-label="Toggle dark mode">🌙</button>
+        <button id="toggle-lang" aria-label="Toggle language" title="Toggle language">EN</button>
+        <button id="toggle-dark-mode" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
       </nav>
     </header>
     <div class="login-box">
-      <h2 id="register-heading">Register</h2>
-      <form id="register-form">
-        <input type="text" id="username" placeholder="Enter Username" required />
-        <input type="password" id="password" placeholder="Enter Password" required />
-        <select id="role">
+      <h2 id="register-heading" tabindex="0">Register</h2>
+      <form id="register-form" aria-label="Registration form">
+        <input type="text" id="username" placeholder="Enter Username" required aria-label="Username" />
+        <input type="password" id="password" placeholder="Enter Password" required aria-label="Password" />
+        <select id="role" aria-label="Select Role">
           <option value="user">User</option>
           <option value="admin">Admin</option>
         </select>
-        <button type="submit">Register</button>
+        <button type="submit" title="Click to register">Register</button>
       </form>
       <p id="register-message"></p>
       <p>Already have an account? <a href="index.html">Login here</a></p>

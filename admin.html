@@ -10,24 +10,24 @@
 <body>
   <div class="wrapper">
     <header>
-      <h1 id="header-title">Library Management System - Admin Panel</h1>
+      <h1 id="header-title" tabindex="0" title="Admin Panel">Library Management System - Admin Panel</h1>
       <nav>
-        <button id="home-btn">Home</button>
-        <button id="logout-btn">Logout</button>
-        <button id="toggle-lang" aria-label="Toggle language">EN</button>
-        <button id="toggle-dark-mode" aria-label="Toggle dark mode">🌙</button>
+        <button id="home-btn" aria-label="Go to Home" title="Home">Home</button>
+        <button id="logout-btn" aria-label="Logout" title="Logout">Logout</button>
+        <button id="toggle-lang" aria-label="Toggle language" title="Toggle language">EN</button>
+        <button id="toggle-dark-mode" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
       </nav>
     </header>
     <main>
-      <section id="analytics" class="container">
+      <section id="analytics" class="container" aria-label="Analytics">
         <canvas id="analyticsChart" width="400" height="200"></canvas>
       </section>
-      <section class="container">
+      <section class="container" aria-label="Add Book">
         <form id="add-book-form">
-          <input type="text" id="book-name" placeholder="Book Name" required>
-          <input type="text" id="book-author" placeholder="Author Name" required>
-          <input type="text" id="book-image" placeholder="Image URL (optional)">
-          <button type="submit">Add Book</button>
+          <input type="text" id="book-name" placeholder="Book Name" required aria-label="Book Name">
+          <input type="text" id="book-author" placeholder="Author Name" required aria-label="Author Name">
+          <input type="text" id="book-image" placeholder="Image URL (optional)" aria-label="Image URL">
+          <button type="submit" title="Add Book">Add Book</button>
         </form>
         <p id="message"></p>
       </section>

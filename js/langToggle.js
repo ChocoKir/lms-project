@@ -43,7 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   function applyTranslations(lang) {
-    // Header Title
     const headerTitle = document.getElementById("header-title");
     if (headerTitle) {
       if (window.location.pathname.includes("admin.html")) {
@@ -52,35 +51,29 @@ document.addEventListener("DOMContentLoaded", () => {
         headerTitle.innerText = translations[lang].headerTitle;
       }
     }
-    // Login/Register Headings
-    const heading = document.querySelector(".login-box h2");
-    if (heading) {
+    const loginHeading = document.querySelector(".login-box h2");
+    if (loginHeading) {
       if (window.location.pathname.includes("register.html")) {
-        heading.innerText = translations[lang].registerHeading;
+        loginHeading.innerText = translations[lang].registerHeading;
       } else {
-        heading.innerText = translations[lang].loginHeading;
+        loginHeading.innerText = translations[lang].loginHeading;
       }
     }
-    // Search placeholders
     const searchInput = document.getElementById("search");
     if (searchInput) searchInput.placeholder = translations[lang].searchPlaceholder;
     const authorInput = document.getElementById("search-author");
     if (authorInput) authorInput.placeholder = translations[lang].authorPlaceholder;
-    // Sort dropdown
     const sortSelect = document.getElementById("sort-by");
     if (sortSelect && sortSelect.options.length >= 2) {
       sortSelect.options[0].text = translations[lang].sortByTitle;
       sortSelect.options[1].text = translations[lang].sortByAuthor;
     }
-    // Chat button
     const chatBtn = document.getElementById("chat-btn");
     if (chatBtn) chatBtn.innerText = translations[lang].chatButton;
-    // Profile and Logout buttons
     const profileBtn = document.getElementById("profile-btn");
     if (profileBtn) profileBtn.innerText = translations[lang].profileButton;
     const logoutBtn = document.getElementById("logout-btn");
     if (logoutBtn) logoutBtn.innerText = translations[lang].logoutButton;
-    // Admin Add Book form
     const bookNameInput = document.getElementById("book-name");
     if (bookNameInput) bookNameInput.placeholder = translations[lang].addBookPlaceholderName;
     const bookAuthorInput = document.getElementById("book-author");

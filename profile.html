@@ -9,30 +9,30 @@
 <body>
   <div class="wrapper">
     <header>
-      <h1 id="header-title">Library Management System</h1>
+      <h1 id="header-title" tabindex="0" title="My Profile">Library Management System</h1>
       <nav>
-        <button id="home-btn">Home</button>
-        <button id="logout-btn">Logout</button>
-        <button id="toggle-lang" aria-label="Toggle language">EN</button>
-        <button id="toggle-dark-mode" aria-label="Toggle dark mode">🌙</button>
+        <button id="home-btn" aria-label="Go to Home" title="Home">Home</button>
+        <button id="logout-btn" aria-label="Logout" title="Logout">Logout</button>
+        <button id="toggle-lang" aria-label="Toggle language" title="Toggle language">EN</button>
+        <button id="toggle-dark-mode" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
       </nav>
     </header>
     <main>
-      <section id="profile-info" class="container">
-        <img id="profile-pic" src="default-profile.jpg" alt="Profile Picture" width="100" style="cursor:pointer;">
+      <section id="profile-info" class="container" aria-label="Profile Info">
+        <img id="profile-pic" src="default-profile.jpg" alt="Profile Picture" loading="lazy" width="100" style="cursor:pointer;">
         <p><strong>Username:</strong> <span id="username"></span></p>
         <p><strong>Nickname:</strong> <span id="nickname"></span></p>
         <input type="file" id="file-upload" style="display:none;" accept="image/*">
       </section>
-      <section class="container edit-profile">
+      <section class="container edit-profile" aria-label="Edit Profile">
         <h2>Edit Profile</h2>
         <form id="edit-profile-form">
-          <input type="text" id="new-nickname" placeholder="New Nickname" />
-          <input type="text" id="new-profile-pic" placeholder="Profile Picture URL" />
-          <button type="submit">Update Profile</button>
+          <input type="text" id="new-nickname" placeholder="New Nickname" aria-label="New Nickname">
+          <input type="text" id="new-profile-pic" placeholder="Profile Picture URL" aria-label="Profile Picture URL">
+          <button type="submit" title="Update Profile">Update Profile</button>
         </form>
         <p id="message"></p>
-        <button id="export-btn">Export Borrowing History</button>
+        <button id="export-btn" title="Export Borrowing History">Export Borrowing History</button>
       </section>
     </main>
     <footer>
