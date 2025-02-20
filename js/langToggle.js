@@ -51,12 +51,12 @@ document.addEventListener("DOMContentLoaded", () => {
         headerTitle.innerText = translations[lang].headerTitle;
       }
     }
-    const loginHeading = document.querySelector(".login-box h2");
-    if (loginHeading) {
+    const heading = document.querySelector(".login-box h2");
+    if (heading) {
       if (window.location.pathname.includes("register.html")) {
-        loginHeading.innerText = translations[lang].registerHeading;
+        heading.innerText = translations[lang].registerHeading;
       } else {
-        loginHeading.innerText = translations[lang].loginHeading;
+        heading.innerText = translations[lang].loginHeading;
       }
     }
     const searchInput = document.getElementById("search");

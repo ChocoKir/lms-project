@@ -70,7 +70,6 @@ document.getElementById("file-upload").addEventListener("change", async (e) => {
 
 // Export Borrowing History as CSV
 document.getElementById("export-btn")?.addEventListener("click", async () => {
-  // Get user's UUID from custom users table
   const { data: userData, error: userError } = await supabase
     .from("users")
     .select("id")

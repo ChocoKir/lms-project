@@ -12,7 +12,7 @@
       <h1 id="header-title" tabindex="0" title="Library Management System">Library Management System</h1>
       <nav>
         <button id="profile-btn" aria-label="Go to your profile" title="My Profile">My Profile</button>
-        <button id="admin-btn" style="display: none;" aria-label="Admin panel" title="Admin Panel">Admin Panel</button>
+        <button id="admin-btn" style="display: none;" aria-label="Admin Panel" title="Admin Panel">Admin Panel</button>
         <button id="chat-btn" aria-label="Open chat forum" title="Chat">Chat</button>
         <button id="toggle-lang" aria-label="Toggle language" title="Toggle language">EN</button>
         <button id="toggle-dark-mode" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
@@ -27,10 +27,13 @@
         <select id="sort-by" aria-label="Sort options">
           <option value="name">Sort by Title</option>
           <option value="author">Sort by Author</option>
+          <option value="avgRating">Sort by Average Rating</option>
+          <option value="created_at">Sort by Date Added</option>
         </select>
         <button id="search-btn" title="Search">Search</button>
       </section>
       <section id="book-list" tabindex="0"></section>
+      <section id="recommendations" class="container" tabindex="0"></section>
     </main>
     
     <footer>
@@ -53,7 +56,6 @@
   <script type="module" src="js/googleBooks.js"></script>
   <script type="module" src="js/onboarding.js"></script>
   <script>
-    // Navigate to chat page when Chat button is clicked
     document.getElementById("chat-btn").addEventListener("click", () => {
       window.location.href = "chat.html";
     });

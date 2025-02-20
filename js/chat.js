@@ -38,9 +38,7 @@ chatForm.addEventListener("submit", async (e) => {
   const { error } = await supabase
     .from("chat_messages")
     .insert([{ username: loggedInUser, message }]);
-  if (error) {
-    showToast("Error sending message: " + error.message);
-  }
+  if (error) showToast("Error sending message: " + error.message);
   chatInput.value = "";
 });
 

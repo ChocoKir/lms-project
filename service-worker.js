@@ -1,4 +1,3 @@
-// service-worker.js
 const CACHE_NAME = 'lms-cache-v1';
 const STATIC_ASSETS = [
   'index.html',
@@ -30,7 +29,6 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
-  // Network-first strategy for API calls, cache-first for others
   if (event.request.url.includes('/api/')) {
     event.respondWith(
       fetch(event.request).catch(() => caches.match(event.request))

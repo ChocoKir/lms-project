@@ -22,6 +22,46 @@ async function loadAllBooks() {
 }
 loadAllBooks();
 
+// Define addToRecentlyViewed only once
+function addToRecentlyViewed(bookId) {
+  let viewed = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
+  // Remove if already exists, then add at the beginning
+  viewed = viewed.filter(id => id !== bookId);
+  viewed.unshift(bookId);
+  if (viewed.length > 5) viewed = viewed.slice(0, 5);
+  localStorage.setItem("recentlyViewed", JSON.stringify(viewed));
+}
+
+// Load Recommendations based on recently viewed books
+async function loadRecommendations() {
+  const recSection = document.getElementById("recommendations");
+  if (!recSection) return;
+  const viewed = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
+  if (viewed.length === 0) {
+    recSection.innerHTML = "<p>No recommendations available.</p>";
+    return;
+  }
+  const { data: recBooks, error } = await supabase
+    .from("books")
+    .select("*")
+    .in("id", viewed);
+  if (error) {
+    recSection.innerHTML = "<p>Error loading recommendations.</p>";
+    return;
+  }
+  recSection.innerHTML = "<h3>Recommended for you:</h3>";
+  recBooks.forEach(book => {
+    const recItem = document.createElement("div");
+    recItem.classList.add("book-item");
+    recItem.innerHTML = `
+      <h4>${book.name}</h4>
+      <p>Author: ${book.author}</p>
+      <img src="${book.image_url || 'placeholder.jpg'}" alt="Book Cover" loading="lazy" width="80" style="cursor:pointer;" onclick="openModalWithBook('${book.id}')">
+    `;
+    recSection.appendChild(recItem);
+  });
+}
+
 // Helper: Check if a book is favorited
 async function isFavorite(bookId) {
   const { data } = await supabase
@@ -61,18 +101,31 @@ async function toggleFavorite(bookId, btnElement) {
   reloadBooks();
 }
 
+// Compute average rating from reviews array
+function computeAverageRating(reviews) {
+  if (!reviews || reviews.length === 0) return "N/A";
+  const sum = reviews.reduce((acc, rev) => acc + rev.rating, 0);
+  return (sum / reviews.length).toFixed(1);
+}
+
 // Fetch Books with filtering, sorting, and pagination
 async function fetchBooks(titleQuery = "", authorQuery = "", sortBy = "name", page = 0) {
   const from = page * pageSize;
   const to = from + pageSize - 1;
-  const { data: books, error } = await supabase
+  
+  let query = supabase
     .from("books")
     .select("*")
     .ilike("name", `%${titleQuery}%`)
-    .ilike("author", `%${authorQuery}%`)
-    .order(sortBy, { ascending: true })
-    .range(from, to);
+    .ilike("author", `%${authorQuery}%`);
   
+  if (sortBy !== "avgRating") {
+    query = query.order(sortBy, { ascending: true }).range(from, to);
+  } else {
+    query = query;
+  }
+  
+  const { data: books, error } = await query;
   const bookList = document.getElementById("book-list");
   if (page === 0) bookList.innerHTML = "";
   if (error) {
@@ -84,12 +137,26 @@ async function fetchBooks(titleQuery = "", authorQuery = "", sortBy = "name", pa
     return;
   }
   
+  if (sortBy === "avgRating") {
+    for (let book of books) {
+      const { data: reviews } = await supabase
+        .from("reviews")
+        .select("rating")
+        .eq("book_id", book.id);
+      book.avgRating = parseFloat(computeAverageRating(reviews));
+    }
+    books.sort((a, b) => b.avgRating - a.avgRating);
+    books.splice(0, page * pageSize);
+    books.splice(pageSize);
+  }
+  
   books.forEach((book) => {
     const bookItem = document.createElement("div");
     bookItem.classList.add("book-item");
     bookItem.innerHTML = `
       <h3>${book.name}</h3>
       <p>Author: ${book.author}</p>
+      <p id="avg-rating-${book.id}">Average Rating: Loading...</p>
       <img src="${book.image_url || 'placeholder.jpg'}" alt="Book Cover" loading="lazy" width="100" style="cursor:pointer;" onclick="openModalWithBook('${book.id}')">
       <p>${book.borrowed_by ? `❌ Borrowed by ${book.borrowed_by}` : "✅ Available"}</p>
       ${
@@ -98,15 +165,16 @@ async function fetchBooks(titleQuery = "", authorQuery = "", sortBy = "name", pa
           : (!book.borrowed_by ? `<button onclick="borrowBook('${book.id}')">Borrow</button>` : "")
       }
     `;
-    // Favorite button
     const favBtn = document.createElement("button");
     favBtn.innerText = "☆";
+    favBtn.title = "Mark as Favorite";
     favBtn.onclick = async () => { await toggleFavorite(book.id, favBtn); };
     bookItem.appendChild(favBtn);
-    // Reservation button
+    
     if (book.borrowed_by && !book.reserved_by) {
       const reserveBtn = document.createElement("button");
       reserveBtn.innerText = "Reserve";
+      reserveBtn.title = "Reserve Book";
       reserveBtn.onclick = () => reserveBook(book.id);
       bookItem.appendChild(reserveBtn);
     } else if (book.reserved_by) {
@@ -114,7 +182,7 @@ async function fetchBooks(titleQuery = "", authorQuery = "", sortBy = "name", pa
       reservedText.innerText = `Reserved by ${book.reserved_by}`;
       bookItem.appendChild(reservedText);
     }
-    // Reviews Section and Form (header is set dynamically)
+    
     const reviewSection = document.createElement("div");
     reviewSection.innerHTML = `
       <div id="reviews-${book.id}"></div>
@@ -132,9 +200,10 @@ async function fetchBooks(titleQuery = "", authorQuery = "", sortBy = "name", pa
     loadStars(book.id);
     loadReviews(book.id);
   });
+  loadRecommendations();
 }
 
-// Borrow Book: Updates both books and borrowed_books table
+// Borrow Book: Updates books and inserts into borrowed_books table
 async function borrowBook(bookId) {
   const { error: updateError } = await supabase
     .from("books")
@@ -161,11 +230,12 @@ async function borrowBook(bookId) {
     showToast("Failed to record borrowing: " + insertError.message);
   } else {
     showToast("Book borrowed successfully!");
+    addToRecentlyViewed(bookId);
     reloadBooks();
   }
 }
 
-// Return Book: Updates both books and borrowed_books table
+// Return Book: Updates books and marks borrowed_books as returned
 async function returnBook(bookId) {
   const { error: updateError } = await supabase
     .from("books")
@@ -221,7 +291,7 @@ async function submitReview(e, bookId) {
   else { showToast("Review submitted!"); loadReviews(bookId); form.reset(); loadStars(bookId); }
 }
 
-// Load Reviews
+// Load Reviews and update average rating on book card
 async function loadReviews(bookId) {
   const { data: reviews, error } = await supabase
     .from("reviews")
@@ -230,16 +300,20 @@ async function loadReviews(bookId) {
     .order("created_at", { ascending: false });
   const container = document.getElementById(`reviews-${bookId}`);
   container.innerHTML = "<h4>Reviews:</h4>";
-  if (error) {
-    container.innerHTML += "<p>Error loading reviews.</p>";
-    return;
-  }
+  if (error) { container.innerHTML += "<p>Error loading reviews.</p>"; return; }
+  let total = 0;
   reviews.forEach((rev) => {
+    total += rev.rating;
     const revDiv = document.createElement("div");
     revDiv.classList.add("review");
     revDiv.innerHTML = `<strong>${rev.username}</strong> rated: ${rev.rating}/5<br>${rev.review_text}`;
     container.appendChild(revDiv);
   });
+  const avgRating = reviews.length ? (total / reviews.length).toFixed(1) : "N/A";
+  const avgDisplay = document.getElementById(`avg-rating-${bookId}`);
+  if (avgDisplay) {
+    avgDisplay.innerText = `Average Rating: ${avgRating}/5`;
+  }
 }
 
 // Load Stars for Review Form
@@ -262,7 +336,7 @@ window.setReviewRating = function(event, rating, bookId) {
   });
 };
 
-// Modal functions: Fetch extra details from Google Books API too
+// Modal functions: Also fetch extra details from Google Books API
 window.openModalWithBook = async function(bookId) {
   const { data: book, error } = await supabase
     .from("books")
@@ -270,6 +344,9 @@ window.openModalWithBook = async function(bookId) {
     .eq("id", bookId)
     .single();
   if (error || !book) { showToast("Error loading book details."); return; }
+  
+  addToRecentlyViewed(bookId);
+  
   let modalHTML = `
     <h2>${book.name}</h2>
     <p><strong>Author:</strong> ${book.author}</p>
@@ -291,7 +368,6 @@ window.openModalWithBook = async function(bookId) {
   } else { modalHTML += "<p>No reviews yet.</p>"; }
   openModal(modalHTML);
   
-  // Add event listener for extra details
   document.getElementById("extra-details-btn").addEventListener("click", async () => {
     const extraDetails = await fetchGoogleBookDetails(book.name);
     if (extraDetails) {
