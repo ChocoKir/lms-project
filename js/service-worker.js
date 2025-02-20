@@ -1,3 +1,4 @@
+// service-worker.js
 const CACHE_NAME = 'lms-cache-v1';
 const urlsToCache = [
   'index.html',
