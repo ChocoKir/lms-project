@@ -1,4 +1,3 @@
-// js/admin.js
 import { supabase } from "./supabase.js";
 import { showToast } from "./utils.js";
 
@@ -21,7 +20,6 @@ async function checkAdmin() {
 }
 checkAdmin();
 
-// Load analytics data and render Chart.js chart
 async function loadAnalyticsData() {
   const { count: totalBooks } = await supabase
     .from("books")

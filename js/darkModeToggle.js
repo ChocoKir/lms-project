@@ -1,7 +1,7 @@
-// js/darkModeToggle.js
 document.addEventListener("DOMContentLoaded", () => {
   const toggleBtn = document.getElementById("toggle-dark-mode");
   if (!toggleBtn) return;
+  // Apply saved dark mode state
   if (localStorage.getItem("darkMode") === "enabled") {
     document.body.classList.add("dark-mode");
   }

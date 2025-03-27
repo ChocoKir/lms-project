@@ -1,4 +1,3 @@
-// js/utils.js
 export function showToast(message) {
   const container = document.getElementById("toast-container");
   if (!container) return;

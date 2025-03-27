@@ -1,4 +1,3 @@
-// js/home.js
 import { supabase } from "./supabase.js";
 import { showToast } from "./utils.js";
 import { fetchGoogleBookDetails } from "./googleBooks.js";
@@ -25,7 +24,6 @@ loadAllBooks();
 // Define addToRecentlyViewed only once
 function addToRecentlyViewed(bookId) {
   let viewed = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
-  // Remove if already exists, then add at the beginning
   viewed = viewed.filter(id => id !== bookId);
   viewed.unshift(bookId);
   if (viewed.length > 5) viewed = viewed.slice(0, 5);
@@ -56,7 +54,7 @@ async function loadRecommendations() {
     recItem.innerHTML = `
       <h4>${book.name}</h4>
       <p>Author: ${book.author}</p>
-      <img src="${book.image_url || 'placeholder.jpg'}" alt="Book Cover" loading="lazy" width="80" style="cursor:pointer;" onclick="openModalWithBook('${book.id}')">
+      <img src="${book.image_url || 'default-book.png'}" alt="Book Cover" loading="lazy" width="80" style="cursor:pointer;" onclick="openModalWithBook('${book.id}')">
     `;
     recSection.appendChild(recItem);
   });
@@ -121,8 +119,6 @@ async function fetchBooks(titleQuery = "", authorQuery = "", sortBy = "name", pa
   
   if (sortBy !== "avgRating") {
     query = query.order(sortBy, { ascending: true }).range(from, to);
-  } else {
-    query = query;
   }
   
   const { data: books, error } = await query;
@@ -157,7 +153,7 @@ async function fetchBooks(titleQuery = "", authorQuery = "", sortBy = "name", pa
       <h3>${book.name}</h3>
       <p>Author: ${book.author}</p>
       <p id="avg-rating-${book.id}">Average Rating: Loading...</p>
-      <img src="${book.image_url || 'placeholder.jpg'}" alt="Book Cover" loading="lazy" width="100" style="cursor:pointer;" onclick="openModalWithBook('${book.id}')">
+      <img src="${book.image_url || 'default-book.png'}" alt="Book Cover" loading="lazy" width="100" style="cursor:pointer;" onclick="openModalWithBook('${book.id}')">
       <p>${book.borrowed_by ? `❌ Borrowed by ${book.borrowed_by}` : "✅ Available"}</p>
       ${
         book.borrowed_by === loggedInUser
@@ -196,14 +192,13 @@ async function fetchBooks(titleQuery = "", authorQuery = "", sortBy = "name", pa
       </form>
     `;
     bookItem.appendChild(reviewSection);
-    bookList.appendChild(bookItem);
+    document.getElementById("book-list").appendChild(bookItem);
     loadStars(book.id);
     loadReviews(book.id);
   });
   loadRecommendations();
 }
 
-// Borrow Book: Updates books and inserts into borrowed_books table
 async function borrowBook(bookId) {
   const { error: updateError } = await supabase
     .from("books")
@@ -235,7 +230,6 @@ async function borrowBook(bookId) {
   }
 }
 
-// Return Book: Updates books and marks borrowed_books as returned
 async function returnBook(bookId) {
   const { error: updateError } = await supabase
     .from("books")
@@ -268,7 +262,6 @@ async function returnBook(bookId) {
   }
 }
 
-// Reserve Book
 async function reserveBook(bookId) {
   const { error } = await supabase
     .from("books")
@@ -278,7 +271,6 @@ async function reserveBook(bookId) {
   else { showToast("Book reserved!"); reloadBooks(); }
 }
 
-// Submit Review
 async function submitReview(e, bookId) {
   e.preventDefault();
   const form = e.target;
@@ -291,7 +283,6 @@ async function submitReview(e, bookId) {
   else { showToast("Review submitted!"); loadReviews(bookId); form.reset(); loadStars(bookId); }
 }
 
-// Load Reviews and update average rating on book card
 async function loadReviews(bookId) {
   const { data: reviews, error } = await supabase
     .from("reviews")
@@ -316,7 +307,6 @@ async function loadReviews(bookId) {
   }
 }
 
-// Load Stars for Review Form
 function loadStars(bookId) {
   const starContainer = document.getElementById(`stars-${bookId}`);
   if (!starContainer) return;
@@ -336,7 +326,6 @@ window.setReviewRating = function(event, rating, bookId) {
   });
 };
 
-// Modal functions: Also fetch extra details from Google Books API
 window.openModalWithBook = async function(bookId) {
   const { data: book, error } = await supabase
     .from("books")
@@ -350,7 +339,7 @@ window.openModalWithBook = async function(bookId) {
   let modalHTML = `
     <h2>${book.name}</h2>
     <p><strong>Author:</strong> ${book.author}</p>
-    <img src="${book.image_url || 'placeholder.jpg'}" alt="Book Cover" loading="lazy" width="150">
+    <img src="${book.image_url || 'default-book.png'}" alt="Book Cover" loading="lazy" width="150">
     <p>${book.borrowed_by ? `Borrowed by ${book.borrowed_by}` : "Available"}</p>
     <button id="extra-details-btn">View Extra Details</button>
     <div id="extra-details"></div>
@@ -392,7 +381,6 @@ window.closeModal = function() {
   document.getElementById("modal-overlay").style.display = "none";
 };
 
-// Infinite Scroll
 window.addEventListener("scroll", () => {
   if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
     currentPage++;
@@ -409,7 +397,6 @@ function reloadBooks() {
   fetchBooks(titleQuery, authorQuery, document.getElementById("sort-by")?.value || "name", currentPage);
 }
 
-// Search Suggestions (Autocomplete)
 document.getElementById("search").addEventListener("input", (e) => {
   const input = e.target.value.toLowerCase();
   const suggestions = allBooks.filter(name => name.toLowerCase().includes(input));
@@ -437,7 +424,6 @@ document.getElementById("search").addEventListener("input", (e) => {
   });
 });
 
-// Real-time updates via Supabase channel
 const channel = supabase
   .channel('books-changes')
   .on('postgres_changes', { event: '*', schema: 'public', table: 'books' }, payload => {
@@ -445,7 +431,6 @@ const channel = supabase
   })
   .subscribe();
 
-// Navigation
 document.getElementById("profile-btn").addEventListener("click", () => {
   window.location.href = "profile.html";
 });

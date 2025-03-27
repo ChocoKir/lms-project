@@ -1,4 +1,3 @@
-// js/notifications.js
 export function sendBrowserNotification(title, options = {}) {
   if ("Notification" in window) {
     if (Notification.permission === "granted") {

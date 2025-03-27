@@ -7,32 +7,45 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <div class="wrapper">
-    <header>
-      <h1 id="header-title" tabindex="0" title="Library Chat Forum">Library Chat Forum</h1>
-      <nav>
-        <button id="home-btn" aria-label="Go to Home" title="Home">Home</button>
-        <button id="logout-btn" aria-label="Logout" title="Logout">Logout</button>
+  <div id="scroll-progress"></div>
+  
+  <header class="navbar animate-fadeInDown" role="banner">
+    <nav role="navigation" aria-label="Chat forum navigation">
+      <div class="logo hover-title" id="header-title">Library Chat Forum</div>
+      <ul class="nav-links">
+        <li><a href="home.html">Home</a></li>
+      </ul>
+      <div class="nav-buttons">
         <button id="toggle-lang" aria-label="Toggle language" title="Toggle language">EN</button>
         <button id="toggle-dark-mode" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
-      </nav>
-    </header>
-    <main>
-      <div id="chat-container" class="container" aria-label="Chat forum">
-        <div id="chat-messages" style="height:300px; overflow:auto; border:1px solid #ccc; padding:1rem;" tabindex="0"></div>
-        <form id="chat-form" aria-label="Chat message form">
-          <input type="text" id="chat-input" placeholder="Type a message..." required aria-label="Chat input">
-          <button type="submit" title="Send message">Send</button>
-        </form>
       </div>
-    </main>
-    <footer>
-      <p>&copy; 2025 Library Management System</p>
-    </footer>
-  </div>
-  <div id="toast-container" class="toast-container"></div>
-  <script type="module" src="js/chat.js"></script>
+    </nav>
+  </header>
+  
+  <main class="animate-fadeIn">
+    <section class="chat-section">
+      <h2>Chat Forum</h2>
+      <div id="chat-messages">
+        <!-- Chat messages will appear here -->
+      </div>
+      <form id="chat-form">
+        <input type="text" id="chat-input" placeholder="Type a message..." required>
+        <button type="submit" class="animated-button">Send</button>
+      </form>
+    </section>
+  </main>
+  
+  <button id="back-to-top" aria-label="Back to top" title="Back to top">↑</button>
+  
+  <footer class="animate-fadeIn" role="contentinfo">
+    <p>&copy; 2025 Library Management System. All rights reserved.</p>
+  </footer>
+  
+  <script src="js/chat.js"></script>
+  <script src="js/scrollProgress.js"></script>
   <script type="module" src="js/langToggle.js"></script>
-  <script type="module" src="js/darkModeToggle.js"></script>
+  <script src="js/darkModeToggle.js"></script>
+  <script type="module" src="js/notificationCenter.js"></script>
+  <script type="module" src="js/notifications.js"></script>
 </body>
 </html>

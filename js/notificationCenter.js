@@ -1,4 +1,3 @@
-// js/notificationCenter.js
 export function initNotificationCenter() {
   const center = document.createElement("div");
   center.id = "notification-center";

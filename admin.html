@@ -5,40 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>LMS - Admin Panel</title>
   <link rel="stylesheet" href="css/styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="wrapper">
-    <header>
-      <h1 id="header-title" tabindex="0" title="Admin Panel">Library Management System - Admin Panel</h1>
-      <nav>
-        <button id="home-btn" aria-label="Go to Home" title="Home">Home</button>
-        <button id="logout-btn" aria-label="Logout" title="Logout">Logout</button>
+  <div id="scroll-progress"></div>
+  
+  <header class="navbar animate-fadeInDown" role="banner">
+    <nav role="navigation" aria-label="Admin navigation">
+      <div class="logo hover-title" id="header-title">Library Management System - Admin Panel</div>
+      <ul class="nav-links">
+        <li><a href="home.html">Home</a></li>
+      </ul>
+      <div class="nav-buttons">
         <button id="toggle-lang" aria-label="Toggle language" title="Toggle language">EN</button>
         <button id="toggle-dark-mode" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
-      </nav>
-    </header>
-    <main>
-      <section id="analytics" class="container" aria-label="Analytics">
-        <canvas id="analyticsChart" width="400" height="200"></canvas>
-      </section>
-      <section class="container" aria-label="Add Book">
-        <form id="add-book-form">
-          <input type="text" id="book-name" placeholder="Book Name" required aria-label="Book Name">
-          <input type="text" id="book-author" placeholder="Author Name" required aria-label="Author Name">
-          <input type="text" id="book-image" placeholder="Image URL (optional)" aria-label="Image URL">
-          <button type="submit" title="Add Book">Add Book</button>
-        </form>
-        <p id="message"></p>
-      </section>
-    </main>
-    <footer>
-      <p>&copy; 2025 Library Management System</p>
-    </footer>
-  </div>
-  <div id="toast-container" class="toast-container"></div>
-  <script type="module" src="js/admin.js"></script>
+      </div>
+    </nav>
+  </header>
+  
+  <main class="animate-fadeIn">
+    <section class="admin-section">
+      <h2>Admin Dashboard</h2>
+      <p>Admin functionalities go here (analytics, book management, etc.).</p>
+    </section>
+  </main>
+  
+  <button id="back-to-top" aria-label="Back to top" title="Back to top">↑</button>
+  
+  <footer class="animate-fadeIn" role="contentinfo">
+    <p>&copy; 2025 Library Management System. All rights reserved.</p>
+  </footer>
+  
+  <script src="js/admin.js"></script>
+  <script src="js/scrollProgress.js"></script>
   <script type="module" src="js/langToggle.js"></script>
-  <script type="module" src="js/darkModeToggle.js"></script>
+  <script src="js/darkModeToggle.js"></script>
+  <script type="module" src="js/notificationCenter.js"></script>
+  <script type="module" src="js/notifications.js"></script>
 </body>
 </html>

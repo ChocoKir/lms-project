@@ -1,4 +1,3 @@
-// js/profile.js
 import { supabase } from "./supabase.js";
 import { showToast } from "./utils.js";
 
@@ -47,7 +46,6 @@ document.getElementById("edit-profile-form").addEventListener("submit", async (e
   }
 });
 
-// Avatar upload
 document.getElementById("profile-pic").addEventListener("click", () => {
   document.getElementById("file-upload").click();
 });
@@ -68,7 +66,6 @@ document.getElementById("file-upload").addEventListener("change", async (e) => {
   }
 });
 
-// Export Borrowing History as CSV
 document.getElementById("export-btn")?.addEventListener("click", async () => {
   const { data: userData, error: userError } = await supabase
     .from("users")
@@ -111,7 +108,6 @@ document.getElementById("export-btn")?.addEventListener("click", async () => {
   a.click();
 });
 
-// Navigation
 document.getElementById("home-btn").addEventListener("click", () => {
   window.location.href = "home.html";
 });

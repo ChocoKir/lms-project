@@ -7,58 +7,42 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <div class="wrapper">
-    <header>
-      <h1 id="header-title" tabindex="0" title="Library Management System">Library Management System</h1>
-      <nav>
-        <button id="profile-btn" aria-label="Go to your profile" title="My Profile">My Profile</button>
-        <button id="admin-btn" style="display: none;" aria-label="Admin Panel" title="Admin Panel">Admin Panel</button>
-        <button id="chat-btn" aria-label="Open chat forum" title="Chat">Chat</button>
+  <div id="scroll-progress"></div>
+  
+  <header class="navbar animate-fadeInDown" role="banner">
+    <nav role="navigation" aria-label="Main navigation">
+      <div class="logo hover-title" id="header-title">Library Management System</div>
+      <ul class="nav-links">
+        <li><a href="profile.html">My Profile</a></li>
+        <li><a href="chat.html">Chat</a></li>
+      </ul>
+      <div class="nav-buttons">
         <button id="toggle-lang" aria-label="Toggle language" title="Toggle language">EN</button>
         <button id="toggle-dark-mode" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
-        <button id="logout-btn" aria-label="Logout" title="Logout">Logout</button>
-      </nav>
-    </header>
-    
-    <main>
-      <section class="search-section">
-        <input type="text" id="search" placeholder="Search by title" aria-label="Search by title" />
-        <input type="text" id="search-author" placeholder="Search by author" aria-label="Search by author" />
-        <select id="sort-by" aria-label="Sort options">
-          <option value="name">Sort by Title</option>
-          <option value="author">Sort by Author</option>
-          <option value="avgRating">Sort by Average Rating</option>
-          <option value="created_at">Sort by Date Added</option>
-        </select>
-        <button id="search-btn" title="Search">Search</button>
-      </section>
-      <section id="book-list" tabindex="0"></section>
-      <section id="recommendations" class="container" tabindex="0"></section>
-    </main>
-    
-    <footer>
-      <p>&copy; 2025 Library Management System</p>
-    </footer>
-  </div>
+        <button id="logout-btn">Logout</button>
+      </div>
+    </nav>
+  </header>
   
-  <!-- Modal for detailed book view -->
-  <div id="modal-overlay" class="modal-overlay" style="display: none;" aria-hidden="true">
-    <div class="modal-content">
-      <button class="modal-close" onclick="closeModal()" aria-label="Close modal">×</button>
-      <div id="modal-body"></div>
-    </div>
-  </div>
+  <main class="animate-fadeIn">
+    <section class="home-section">
+      <h2>Welcome Home</h2>
+      <p>Browse our collection, search by title/author, and view personalized recommendations.</p>
+      <div id="book-list"></div>
+    </section>
+  </main>
   
-  <div id="toast-container" class="toast-container"></div>
-  <script type="module" src="js/home.js"></script>
+  <button id="back-to-top" aria-label="Back to top" title="Back to top">↑</button>
+  
+  <footer class="animate-fadeIn" role="contentinfo">
+    <p>&copy; 2025 Library Management System. All rights reserved.</p>
+  </footer>
+  
+  <script src="js/home.js"></script>
+  <script src="js/scrollProgress.js"></script>
   <script type="module" src="js/langToggle.js"></script>
-  <script type="module" src="js/darkModeToggle.js"></script>
-  <script type="module" src="js/googleBooks.js"></script>
-  <script type="module" src="js/onboarding.js"></script>
-  <script>
-    document.getElementById("chat-btn").addEventListener("click", () => {
-      window.location.href = "chat.html";
-    });
-  </script>
+  <script src="js/darkModeToggle.js"></script>
+  <script type="module" src="js/notificationCenter.js"></script>
+  <script type="module" src="js/notifications.js"></script>
 </body>
 </html>

@@ -1,7 +1,5 @@
-// js/supabase.js
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-// Replace with your actual Supabase URL and anon key.
 const SUPABASE_URL = "https://nclreaswclozgwjhmhgw.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jbHJlYXN3Y2xvemd3amhtaGd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk1Mzg0MjEsImV4cCI6MjA1NTExNDQyMX0._GnxD1ZgpITDkWuaDqvpgcLRgd7YF0PN_U80l0gFJ2I";
 

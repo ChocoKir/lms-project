@@ -7,41 +7,48 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <div class="wrapper">
-    <header>
-      <h1 id="header-title" tabindex="0" title="My Profile">Library Management System</h1>
-      <nav>
-        <button id="home-btn" aria-label="Go to Home" title="Home">Home</button>
-        <button id="logout-btn" aria-label="Logout" title="Logout">Logout</button>
+  <div id="scroll-progress"></div>
+  
+  <header class="navbar animate-fadeInDown" role="banner">
+    <nav role="navigation" aria-label="Profile navigation">
+      <div class="logo hover-title" id="header-title">Library Management System</div>
+      <ul class="nav-links">
+        <li><a href="home.html">Home</a></li>
+      </ul>
+      <div class="nav-buttons">
         <button id="toggle-lang" aria-label="Toggle language" title="Toggle language">EN</button>
         <button id="toggle-dark-mode" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
-      </nav>
-    </header>
-    <main>
-      <section id="profile-info" class="container" aria-label="Profile Info">
-        <img id="profile-pic" src="default-profile.jpg" alt="Profile Picture" loading="lazy" width="100" style="cursor:pointer;">
-        <p><strong>Username:</strong> <span id="username"></span></p>
-        <p><strong>Nickname:</strong> <span id="nickname"></span></p>
-        <input type="file" id="file-upload" style="display:none;" accept="image/*">
-      </section>
-      <section class="container edit-profile" aria-label="Edit Profile">
-        <h2>Edit Profile</h2>
-        <form id="edit-profile-form">
-          <input type="text" id="new-nickname" placeholder="New Nickname" aria-label="New Nickname">
-          <input type="text" id="new-profile-pic" placeholder="Profile Picture URL" aria-label="Profile Picture URL">
-          <button type="submit" title="Update Profile">Update Profile</button>
-        </form>
-        <p id="message"></p>
-        <button id="export-btn" title="Export Borrowing History">Export Borrowing History</button>
-      </section>
-    </main>
-    <footer>
-      <p>&copy; 2025 Library Management System</p>
-    </footer>
-  </div>
-  <div id="toast-container" class="toast-container"></div>
-  <script type="module" src="js/profile.js"></script>
+        <button id="logout-btn">Logout</button>
+      </div>
+    </nav>
+  </header>
+  
+  <main class="animate-fadeIn">
+    <section class="profile-section">
+      <h2>My Profile</h2>
+      <p id="username"></p>
+      <img id="profile-pic" src="default-profile.png" alt="Profile Picture">
+      <p id="nickname"></p>
+      <form id="edit-profile-form">
+        <input type="text" id="new-nickname" placeholder="New Nickname">
+        <input type="text" id="new-profile-pic" placeholder="Profile Picture URL">
+        <button type="submit" class="animated-button">Update Profile</button>
+      </form>
+      <button id="export-btn">Export Borrowing History</button>
+    </section>
+  </main>
+  
+  <button id="back-to-top" aria-label="Back to top" title="Back to top">↑</button>
+  
+  <footer class="animate-fadeIn" role="contentinfo">
+    <p>&copy; 2025 Library Management System. All rights reserved.</p>
+  </footer>
+  
+  <script src="js/profile.js"></script>
+  <script src="js/scrollProgress.js"></script>
   <script type="module" src="js/langToggle.js"></script>
-  <script type="module" src="js/darkModeToggle.js"></script>
+  <script src="js/darkModeToggle.js"></script>
+  <script type="module" src="js/notificationCenter.js"></script>
+  <script type="module" src="js/notifications.js"></script>
 </body>
 </html>

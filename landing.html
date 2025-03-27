@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LMS - Welcome</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Scroll Progress Bar -->
+  <div id="scroll-progress"></div>
+  
+  <!-- Header with Navigation -->
+  <header class="navbar animate-fadeInDown" role="banner">
+    <nav role="navigation" aria-label="Main navigation">
+      <div class="logo" id="header-title">Library Management System</div>
+      <ul class="nav-links">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="nav-buttons">
+        <button id="toggle-lang" aria-label="Toggle language" title="Toggle language">EN</button>
+        <button id="toggle-dark-mode" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Main Content -->
+  <main class="animate-fadeIn">
+    <!-- Hero Section -->
+    <section id="hero" class="hero" aria-labelledby="hero-heading">
+      <div class="hero-content animate-bounceIn">
+        <h1 id="hero-heading">Welcome to the Ultimate LMS</h1>
+        <p>Your gateway to exploring and managing a world of books.</p>
+        <button id="cta-btn" class="animated-button" aria-label="Explore now">Explore Now</button>
+      </div>
+      <figure class="hero-image animate-slideIn">
+        <img src="assets/hero-image.jpg" alt="Illustration of a modern library" loading="lazy" />
+        <figcaption class="visually-hidden">Hero image</figcaption>
+      </figure>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features" aria-labelledby="features-heading">
+      <h2 id="features-heading" class="animate-fadeInDown">Key Features</h2>
+      <div class="features-container">
+        <article class="feature-item animate-fadeIn">
+          <h3>Easy Navigation</h3>
+          <p>Simple, clear, and intuitive design.</p>
+        </article>
+        <article class="feature-item animate-fadeIn">
+          <h3>Real-Time Updates</h3>
+          <p>Instant notifications and live data.</p>
+        </article>
+        <article class="feature-item animate-fadeIn">
+          <h3>Personalized Recommendations</h3>
+          <p>Tailored suggestions based on your history.</p>
+        </article>
+        <article class="feature-item animate-fadeIn">
+          <h3>Secure Access</h3>
+          <p>Robust user authentication and data encryption.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about" aria-labelledby="about-heading">
+      <h2 id="about-heading" class="animate-fadeInDown">About LMS</h2>
+      <p class="animate-fadeIn">
+        LMS helps you manage your personal library with ease and efficiency. Discover, borrow, review, and connect with fellow readers.
+      </p>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact" aria-labelledby="contact-heading">
+      <h2 id="contact-heading" class="animate-fadeInDown">Contact Us</h2>
+      <p class="animate-fadeIn">
+        For support or inquiries, email us at <a href="mailto:support@lms.com">support@lms.com</a>.
+      </p>
+    </section>
+  </main>
+  
+  <!-- Back-to-Top Button -->
+  <button id="back-to-top" aria-label="Back to top" title="Back to top">↑</button>
+  
+  <!-- Footer -->
+  <footer class="animate-fadeIn" role="contentinfo">
+    <p>&copy; 2025 Library Management System. All rights reserved.</p>
+  </footer>
+  
+  <!-- Scripts -->
+  <script src="js/landing.js"></script>
+  <script src="js/scrollProgress.js"></script>
+  <script type="module" src="js/langToggle.js"></script>
+  <script src="js/darkModeToggle.js"></script>
+  <script type="module" src="js/onboarding.js"></script>
+  <script type="module" src="js/notificationCenter.js"></script>
+  <script type="module" src="js/notifications.js"></script>
+</body>
+</html>

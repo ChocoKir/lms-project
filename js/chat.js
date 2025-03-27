@@ -1,4 +1,3 @@
-// js/chat.js
 import { supabase } from "./supabase.js";
 import { showToast } from "./utils.js";
 
